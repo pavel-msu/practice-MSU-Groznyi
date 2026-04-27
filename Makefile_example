@@ -1,0 +1,28 @@
+# Define the compiler and standard
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra -g
+
+# Define the target executable name
+TARGET = my_program
+
+# List of source files
+SRCS = main.cpp utils.cpp functions.cpp
+
+# List of object files (replaces .cpp with .o automatically)
+OBJS = $(SRCS:.cpp=.o)
+
+# Default rule to build the executable
+all: $(TARGET)
+
+# Rule to link the object files into the executable
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+
+# Pattern rule to compile .cpp files into .o files
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Rule to clean up build artifacts
+clean:
+	rm -f $(OBJS) $(TARGET)
+
