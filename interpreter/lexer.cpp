@@ -85,14 +85,16 @@ int main() {
     Automat automat;
 
     string line;
-    vector<string> tokens;
+    int i = 0;
     while (getline(cin, line)) {
         stringstream ss(line);
         string token;
-        while (ss >> token) tokens.push_back(token);
-        tokens.push_back("\n");
-    }
-    for (const string& token : tokens) {
-        cout << automat.process(token.c_str());
+        i++;
+        while (ss >> token) {
+            cout 
+              << automat.process(token.c_str()) << '\t'
+              << i << '\t'
+              << token << endl;
+        }
     }
 }

@@ -1,8 +1,8 @@
 lexer.o:
-	g++ -c -g lexer.cpp
+	g++ -c -g lexer.cpp -std=gnu++17
 
 lexer: lexer.o
-	g++ -o lexer lexer.o
+	g++ -o lexer lexer.o 
 
 test-lexer: lexer
 	mkdir -p lexer-test-results
