@@ -1,5 +1,5 @@
-**/.o
-**/.out
+**/*.o
+**/*.out
 **/lexer
 **/parser
 **/.DS_Store

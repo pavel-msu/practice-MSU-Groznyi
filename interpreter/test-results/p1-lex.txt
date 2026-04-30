@@ -1,0 +1,15 @@
+%	       KEYWORD_WRITE	1
+_1	              NUMBER	1
+\n	             ENDLINE	1
+%	       KEYWORD_WRITE	2
+_2	              NUMBER	2
+\n	             ENDLINE	2
+%	       KEYWORD_WRITE	3
+_3	              NUMBER	3
+\n	             ENDLINE	3
+%	       KEYWORD_WRITE	4
+_4	              NUMBER	4
+\n	             ENDLINE	4
+%	       KEYWORD_WRITE	5
+_5	              NUMBER	5
+\n	             ENDLINE	5

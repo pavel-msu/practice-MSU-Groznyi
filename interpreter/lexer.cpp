@@ -1,7 +1,9 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <sstream>
+#include "lexer.hpp"
 
 using namespace std;
 
@@ -32,44 +34,36 @@ class Automat {
     Node* nodes[30];
   public:
     Automat() {
-        nodes[0] = new Node("S");
-        nodes[1] = new Node("IDENTIFIER");
-        nodes[2] = new Node("NUMBER");
-        nodes[3] = new Node("FUNCTION_DEF");
-        nodes[4] = new Node("FUNCTION_END");
-        nodes[5] = new Node("MATH_OP_BINARY");
-        nodes[6] = new Node("MATH_OP_UNARY");
-        nodes[7] = new Node("KEYWORD_IF");
-        nodes[8] = new Node("KEYWORD_LOOP");
-        nodes[9] = new Node("KEYWORD_BREAK");
-        nodes[10] = new Node("KEYWORD_WRITE");
-        nodes[11] = new Node("KEYWORD_READ");
-        nodes[12] = new Node("ENDLINE");
+        for (const auto lex : Lex::All) {
+            nodes[+lex] = new Node(lexToString(lex));
+        }
+       
+        nodes[+Lex::S]->mass_link("0", nodes[+Lex::FUNC_NAME]);
+        nodes[+Lex::FUNC_NAME]->mass_link("0123456789", nodes[+Lex::FUNC_NAME]);
 
-        nodes[0]->mass_link("0123456789", nodes[1]);
-        nodes[1]->mass_link("0123456789", nodes[1]);
+        nodes[+Lex::S]->mass_link("123456789", nodes[+Lex::VAR_NAME]);
+        nodes[+Lex::VAR_NAME]->mass_link("0123456789", nodes[+Lex::VAR_NAME]);
         
-        nodes[0]->mass_link("_", nodes[2]);
-        nodes[2]->mass_link("0123456789", nodes[2]);
+        nodes[+Lex::S]->mass_link("_", nodes[+Lex::DEREFERENCE]);
+        nodes[+Lex::DEREFERENCE]->mass_link("123456789", nodes[+Lex::NUMBER]);
+        nodes[+Lex::NUMBER]->mass_link("0123456789", nodes[+Lex::NUMBER]);
 
-        nodes[0]->mass_link("'", nodes[3]);
-        nodes[3]->mass_link("0123456789", nodes[4]);
-        nodes[4]->mass_link("0123456789", nodes[4]);
-
-        nodes[0]->mass_link("+-=<>^/*", nodes[5]);
-        nodes[0]->mass_link("!", nodes[6]);
-        nodes[0]->mass_link("#", nodes[7]);
-        nodes[0]->mass_link("@", nodes[8]);
-        nodes[0]->mass_link("$", nodes[9]);
-        nodes[0]->mass_link("%", nodes[10]);
-        nodes[0]->mass_link("~", nodes[11]);
-        nodes[0]->mass_link("\n", nodes[12]);
+        nodes[+Lex::S]->mass_link("'", nodes[+Lex::FUNCTION_BORDER]);
+        
+        nodes[+Lex::S]->mass_link("+-=<>^/*", nodes[+Lex::MATH_OP_BINARY]);
+        nodes[+Lex::S]->mass_link("!", nodes[+Lex::MATH_OP_UNARY]);
+        nodes[+Lex::S]->mass_link("#", nodes[+Lex::KEYWORD_IF]);
+        nodes[+Lex::S]->mass_link("@", nodes[+Lex::KEYWORD_LOOP]);
+        nodes[+Lex::S]->mass_link("$", nodes[+Lex::KEYWORD_RETURN]);
+        nodes[+Lex::S]->mass_link("%", nodes[+Lex::KEYWORD_WRITE]);
+        nodes[+Lex::S]->mass_link("~", nodes[+Lex::KEYWORD_READ]);
+        nodes[+Lex::S]->mass_link("\n", nodes[+Lex::ENDLINE]);
     };
     void step(char letter) {
         this->state = this->state->process(letter);
     }
     const string& process(const char* token) {
-        this->state = nodes[0];
+        this->state = nodes[+Lex::S];
         for (const char* letter = token; *letter; letter++) {
             this->step(*letter);
         } 
@@ -91,10 +85,11 @@ int main() {
         string token;
         i++;
         while (ss >> token) {
-            cout 
-              << automat.process(token.c_str()) << '\t'
-              << i << '\t'
-              << token << endl;
+            cout << token << '\t'  
+              << setw(20) << automat.process(token.c_str()) << '\t'
+              << i << endl;
         }
+        cout << "\\n\t" 
+            << setw(20) << lexToString(Lex::ENDLINE) << '\t' << i << endl;
     }
 }
