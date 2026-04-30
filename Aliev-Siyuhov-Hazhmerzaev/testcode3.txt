@@ -1,0 +1,10 @@
+dim a 26 set i = -111
+set j = 25
+label start
+set a[i] = - + j 65 i set i = + i 1 if <= i 25 then goto start set i = 0 label p printc a[i]
+# printc 10
+set i = + i 1
+if <= i 25 then goto p
+printc 10
+printstr a
+exit

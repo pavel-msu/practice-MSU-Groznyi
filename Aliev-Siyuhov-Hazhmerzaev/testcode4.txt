@@ -1,0 +1,4 @@
+readc ch;
+print ch;
+printc ch;
+exit;

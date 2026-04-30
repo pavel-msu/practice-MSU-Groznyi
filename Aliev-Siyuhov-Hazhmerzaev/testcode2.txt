@@ -1,0 +1,27 @@
+set low = 1
+set high = 100
+label loop
+set mid = + low high
+set mid = / mid 2
+print mid
+read ans
+if == ans 0 then goto win
+if == ans -1 then goto less
+if == ans 1 then goto greater
+printc 86
+exit
+goto loop
+label less
+set high = - mid 1
+if < high low then goto error
+goto loop
+label greater
+set low = + mid 1
+if > low high then goto error
+goto loop
+label error
+printc 69
+exit
+label win
+printc 87
+exit

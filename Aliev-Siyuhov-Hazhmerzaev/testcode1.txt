@@ -1,0 +1,7 @@
+# числа от 1 до 5
+set x = 1
+label start
+print x
+set x = + x 1
+if <= x 5 then goto start
+exit
